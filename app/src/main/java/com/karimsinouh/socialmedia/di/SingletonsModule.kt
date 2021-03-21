@@ -15,11 +15,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object SingletonsModule {
 
-
     @Provides
     @Singleton
     fun glide(@ApplicationContext c:Context)=Glide.with(c).applyDefaultRequestOptions(RequestOptions())
-
-
+    
 
 }
