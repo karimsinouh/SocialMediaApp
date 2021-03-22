@@ -100,8 +100,8 @@ class SignUpFragment:Fragment(R.layout.fragment_signup) {
 
         auth.currentUser?.updateProfile(requestChanges)?.addOnCompleteListener {
             if (it.isSuccessful){
-                val user=User(id,name)
-                createUserDocument(user)
+                val user=User(name)
+                createUserDocument(id,user)
             }else{
                 showViews()
                 dialog.setMessage(it.exception?.message).show()
@@ -110,8 +110,8 @@ class SignUpFragment:Fragment(R.layout.fragment_signup) {
     }
 
     //in firestore
-    private fun createUserDocument(user:User){
-        firestore.collection("users").document(user.id!!).set(user).addOnCompleteListener {
+    private fun createUserDocument(id:String,user:User){
+        firestore.collection("users").document(id).set(user).addOnCompleteListener {
             if (it.isSuccessful){
                 nav.popBackStack()
             }else{

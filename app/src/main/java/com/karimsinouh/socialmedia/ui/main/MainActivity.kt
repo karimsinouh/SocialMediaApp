@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         vm.loadCurrentUser(currentUserId)
 
+        vm.loadPosts()
 
     }
 }
