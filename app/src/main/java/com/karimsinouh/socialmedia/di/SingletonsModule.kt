@@ -13,6 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.ocpsoft.prettytime.PrettyTime
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -38,6 +39,10 @@ object SingletonsModule {
     @Singleton
     @Named(USER_ID)
     fun userId(auth:FirebaseAuth)=auth.currentUser?.uid!!
+
+    @Provides
+    @Singleton
+    fun prettyTime()=PrettyTime()
 
 
 }

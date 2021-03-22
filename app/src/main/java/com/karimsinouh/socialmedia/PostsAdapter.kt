@@ -1,6 +1,7 @@
 package com.karimsinouh.socialmedia
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -10,13 +11,18 @@ import com.karimsinouh.socialmedia.data.Post
 import com.karimsinouh.socialmedia.data.User
 import com.karimsinouh.socialmedia.databinding.ItemPostBinding
 import com.karimsinouh.socialmedia.repositories.UserRepo
+import com.karimsinouh.socialmedia.utils.USER_ID
 import com.karimsinouh.socialmedia.utils.hide
 import com.karimsinouh.socialmedia.utils.show
+import org.ocpsoft.prettytime.PrettyTime
 import javax.inject.Inject
+import javax.inject.Named
 
 class PostsAdapter @Inject constructor(
         private val glide:RequestManager,
-        private val userRepo:UserRepo
+        private val userRepo:UserRepo,
+        @Named(USER_ID) private val currentUserId:String,
+        private val prettyTime: PrettyTime
 ):RecyclerView.Adapter<PostsAdapter.PostHolder>() {
 
     inner class PostHolder(private val binding:ItemPostBinding):RecyclerView.ViewHolder(binding.root){
@@ -31,18 +37,34 @@ class PostsAdapter @Inject constructor(
                 }
 
             userRepo.getUser(post.userId!!){
-                if (it.isSuccessful)
-                    bindUser(it.data!!)
+                if (it.isSuccessful) {
+                    bindUser(post,it.data!!)
+                }
+
             }
 
         }
 
-        private fun bindUser(user:User)=binding.apply {
+        private fun bindUser(post:Post,user:User)=binding.apply {
             userSection.userName.text=user.name
-            userSection.subText.text="@Developer"
+            userSection.subText.text=prettyTime.format(post.date)
             glide.load(user.picture).into(userSection.userPicture)
 
             userSection.placeholder.hide()
+
+            root.setOnClickListener {
+                onClick?.let{
+                    it(post,user)
+                }
+            }
+
+            root.setOnLongClickListener { view->
+                onLongClick?.let {
+                    it(view,post)
+                }
+                true
+            }
+
         }
 
 
@@ -68,5 +90,17 @@ class PostsAdapter @Inject constructor(
     private val differ=AsyncListDiffer(this,diffCallback)
 
     fun submitList(it:List<Post>)=differ.submitList(it)
+
+    //callbacks
+    private var onClick:( (Post,User)->Unit )?=null
+    private var onLongClick:( (View, Post)->Unit )?=null
+
+    fun setOnClickListener(listener:(Post,User)->Unit){
+        onClick=listener
+    }
+
+    fun setOnLongClickListener(listener:(View,Post)->Unit){
+        onLongClick=listener
+    }
 
 }

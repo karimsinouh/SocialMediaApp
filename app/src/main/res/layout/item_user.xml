@@ -17,8 +17,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/user_picture"
-            android:layout_width="54dp"
-            android:layout_height="55dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/circleImageView"
             tools:srcCompat="@tools:sample/avatars[0]" />
@@ -63,8 +63,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <View
-            android:layout_width="55dp"
-            android:layout_height="55dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:background="@drawable/circle" />
 
 
