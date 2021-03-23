@@ -42,7 +42,11 @@
     <fragment
         android:id="@+id/home"
         android:name="com.karimsinouh.socialmedia.ui.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/home_to_writePost"
+            app:destination="@id/writePostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/search"
         android:name="com.karimsinouh.socialmedia.ui.search.SearchFragment"
@@ -59,4 +63,8 @@
         android:id="@+id/profile"
         android:name="com.karimsinouh.socialmedia.ui.profile.ProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/writePostFragment"
+        android:name="com.karimsinouh.socialmedia.ui.writePost.WritePostFragment"
+        android:label="WritePostFragment" />
 </navigation>

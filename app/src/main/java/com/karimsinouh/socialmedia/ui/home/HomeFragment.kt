@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.karimsinouh.socialmedia.PostsAdapter
 import com.karimsinouh.socialmedia.R
@@ -19,12 +21,14 @@ import javax.inject.Inject
 class HomeFragment:Fragment(R.layout.fragment_home) {
 
     private lateinit var binding:FragmentHomeBinding
+    private lateinit var nav:NavController
 
     private val vm by activityViewModels<MainViewModel>()
     @Inject lateinit var adapter:PostsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        nav=findNavController()
 
         binding= FragmentHomeBinding.bind(view)
 
@@ -34,6 +38,10 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
 
         adapter.setOnClickListener { _, user ->
             Toast.makeText(requireContext(),user.name,Toast.LENGTH_SHORT).show()
+        }
+
+        binding.writePost.setOnClickListener {
+            nav.navigate(R.id.home_to_writePost)
         }
 
     }
