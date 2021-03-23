@@ -7,8 +7,8 @@ import java.util.*
 data class Post(
         val userId:String?="",
         val text:String?="",
-        val videoUrl:String?=null,
         val pictures:List<String>?= emptyList(),
+        val videoUrl:String?=null,
         val likes:List<String>?= emptyList(),
         val type:Int?= TYPE_TEXT,
         @DocumentId val id:String?="",

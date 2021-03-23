@@ -35,7 +35,6 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
 
     private val vm by viewModels<WritePostViewModel>()
     @Inject lateinit var imagesAdapter:ImagesAdapter
-    @Inject @Named(USER_ID) lateinit var uid:String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -105,18 +104,12 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
         //om save clicked
         binding.toolbar.setOnMenuItemClickListener {
             //since it only has one item we won't check if id..
-            onSaveClicked()
+            vm.save(binding.hashTagsInput.text.toString())
             true
         }
     }
 
-    private fun onSaveClicked(){
-        if (binding.editText.text.isEmpty() && vm.images.value?.isEmpty()!!){
-            Snackbar.make(binding.root,"You can't save an empty post",Snackbar.LENGTH_SHORT).show()
-        }else{
-            val post=Post()
-        }
-    }
+
 
 
     private fun setupRcv()=binding.imagesRcv.apply{
