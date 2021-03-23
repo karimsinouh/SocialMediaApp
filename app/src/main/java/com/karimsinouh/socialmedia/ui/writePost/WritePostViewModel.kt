@@ -1,39 +1,42 @@
 package com.karimsinouh.socialmedia.ui.writePost
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.karimsinouh.socialmedia.utils.addItem
+import com.karimsinouh.socialmedia.utils.removeAt
 
 @HiltViewModel
 class WritePostViewModel @Inject constructor() :ViewModel() {
 
     //mutable values
-    private val _images=MutableLiveData<MutableList<String>>()
+    private val _images=MutableLiveData<MutableList<Uri>>()
+    private val _hashTags=MutableLiveData<List<String>>()
 
 
     //observable values
-    val images:LiveData<MutableList<String>> =_images
+    val images:LiveData<MutableList<Uri>> =_images
+    val hashTags:LiveData<List<String>> =_hashTags
 
 
-    fun addImage(uri:String){
-        _images.addItem(uri)
+
+    //hashTags
+    fun setHashTags(tags:String){
+        val hashList= mutableListOf<String>()
+        for (tag in tags.split(",")){
+            if (tag!="" && tag!=" "){
+                hashList.add(tag)
+            }
+        }
+        _hashTags.value=hashList
+
     }
 
-    fun removeImage(index:Int){
-        _images.removeAt(index)
-    }
-
-    private fun <T> MutableLiveData<MutableList<T>>.addItem(image:T){
-        val value=this.value ?: mutableListOf()
-        value.add(image)
-        this.postValue(value)
-    }
-
-    private fun <T> MutableLiveData<MutableList<T>>.removeAt(index:Int){
-        val value=this.value ?: mutableListOf()
-        value.removeAt(index)
-    }
+    //images
+    fun addImage(uri:Uri){ _images.addItem(uri) }
+    fun removeImage(index:Int){ _images.removeAt(index) }
 
 }

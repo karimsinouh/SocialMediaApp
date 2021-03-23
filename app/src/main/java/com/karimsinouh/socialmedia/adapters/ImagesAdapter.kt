@@ -16,8 +16,8 @@ class ImagesAdapter @Inject constructor(
 
     inner class ImageHolder(private val binding:ItemImageBinding):RecyclerView.ViewHolder(binding.root){
 
-        fun bind(uri: String){
-            glide.load(Uri.parse(uri)).into(binding.image)
+        fun bind(uri: Uri){
+            glide.load(uri).into(binding.image)
             binding.removeButton.setOnClickListener {
                 onRemove?.let {
                     it(adapterPosition)
@@ -38,15 +38,18 @@ class ImagesAdapter @Inject constructor(
     override fun getItemCount()=differ.currentList.size
 
     //diff utils
-    private val diffCallback=object:DiffUtil.ItemCallback<String>(){
-        override fun areItemsTheSame(oldItem: String, newItem: String)=oldItem==newItem
+    private val diffCallback=object:DiffUtil.ItemCallback<Uri>(){
+        override fun areItemsTheSame(oldItem: Uri, newItem: Uri)=oldItem.path==newItem.path
 
-        override fun areContentsTheSame(oldItem: String, newItem: String)=oldItem==newItem
+        override fun areContentsTheSame(oldItem: Uri, newItem: Uri)=oldItem.toString()==newItem.toString()
     }
 
     private val differ=AsyncListDiffer(this,diffCallback)
 
-    fun submitList(it:List<String>)=differ.submitList(it)
+    fun submitList(it:List<Uri>){
+        differ.submitList(it)
+        notifyDataSetChanged()
+    }
 
 
     //callbacks

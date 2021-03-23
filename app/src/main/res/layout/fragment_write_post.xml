@@ -18,7 +18,6 @@
         app:title="Write post" />
 
     <EditText
-
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,6 +77,46 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_hashtag_symbol" />
 
+
+
     </LinearLayout>
+
+   <LinearLayout
+       android:visibility="gone"
+       android:id="@+id/hashTagsLayout"
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_margin="8dp"
+           android:text="#Hashtags"
+           android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+           android:textSize="18sp" />
+
+       <EditText
+           android:id="@+id/hashTagsInput"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="#00000000"
+           android:ems="10"
+           android:hint="reading, coding, ..."
+           android:inputType="textMultiLine"
+           android:paddingStart="12dp"
+           android:paddingTop="16dp"
+           android:paddingEnd="12dp"
+           android:paddingBottom="16dp" />
+   </LinearLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:padding="8dp"
+        android:id="@+id/chipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.google.android.material.chip.ChipGroup>
+
 
 </LinearLayout>
