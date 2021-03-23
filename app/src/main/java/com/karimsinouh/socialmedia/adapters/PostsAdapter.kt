@@ -1,4 +1,4 @@
-package com.karimsinouh.socialmedia
+package com.karimsinouh.socialmedia.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,17 +11,14 @@ import com.karimsinouh.socialmedia.data.Post
 import com.karimsinouh.socialmedia.data.User
 import com.karimsinouh.socialmedia.databinding.ItemPostBinding
 import com.karimsinouh.socialmedia.repositories.UserRepo
-import com.karimsinouh.socialmedia.utils.USER_ID
 import com.karimsinouh.socialmedia.utils.hide
 import com.karimsinouh.socialmedia.utils.show
 import org.ocpsoft.prettytime.PrettyTime
 import javax.inject.Inject
-import javax.inject.Named
 
 class PostsAdapter @Inject constructor(
         private val glide:RequestManager,
         private val userRepo:UserRepo,
-        @Named(USER_ID) private val currentUserId:String,
         private val prettyTime: PrettyTime
 ):RecyclerView.Adapter<PostsAdapter.PostHolder>() {
 

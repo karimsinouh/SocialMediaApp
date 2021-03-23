@@ -8,7 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.karimsinouh.socialmedia.PostsAdapter
+import com.karimsinouh.socialmedia.adapters.PostsAdapter
 import com.karimsinouh.socialmedia.R
 import com.karimsinouh.socialmedia.databinding.FragmentHomeBinding
 import com.karimsinouh.socialmedia.ui.main.MainViewModel
@@ -24,7 +24,7 @@ class HomeFragment:Fragment(R.layout.fragment_home) {
     private lateinit var nav:NavController
 
     private val vm by activityViewModels<MainViewModel>()
-    @Inject lateinit var adapter:PostsAdapter
+    @Inject lateinit var adapter: PostsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
