@@ -2,7 +2,9 @@ package com.karimsinouh.socialmedia.ui.writePost
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -33,6 +35,7 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
 
     private lateinit var binding:FragmentWritePostBinding
     private lateinit var nav:NavController
+    private val VIDEO_REQUEST_CODE=1
 
     private val vm by viewModels<WritePostViewModel>()
     @Inject lateinit var imagesAdapter:ImagesAdapter
@@ -58,8 +61,6 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
         vm.images.observe(viewLifecycleOwner){
             imagesAdapter.submitList(it)
 
-            Log.d("wtf","Observed, size: ${it.size}")
-
             if (it.isNotEmpty())
                 binding.imagesRcv.show()
             else
@@ -76,6 +77,22 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
                 binding.chipGroup.addView(chip)
             }
         }
+
+
+        vm.error.observe(viewLifecycleOwner){
+            Snackbar.make(binding.root,it,Snackbar.LENGTH_LONG).show()
+        }
+
+        vm.videoUri.observe(viewLifecycleOwner){
+
+            if (it!=null){
+                binding.videoView.show()
+                binding.videoView.setVideoURI(Uri.parse(it))
+            }else{
+                binding.videoView.hide()
+            }
+        }
+
     }
 
     private fun onClickListeners() {
@@ -88,7 +105,19 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
 
         //on add pictures clicked
         binding.addPicture.setOnClickListener {
-            CropImage.activity().start(requireActivity(),this)
+            if(vm.videoUri.value==null)
+                CropImage.activity().start(requireActivity(),this)
+            else
+                vm.setError("You can either post pictures or video")
+        }
+
+
+        //on video clicked
+        binding.addVideo.setOnClickListener {
+            if (vm.images.value?.isEmpty()!!)
+                selectVideo()
+            else
+                vm.setError("You can either post pictures or video")
         }
 
 
@@ -103,7 +132,7 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
 
         }
 
-        //om save clicked
+        //on save clicked
         binding.toolbar.setOnMenuItemClickListener {
             //since it only has one item we won't check if id..
             save()
@@ -111,10 +140,15 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
         }
     }
 
+    private fun selectVideo() {
+        val intent=Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent,VIDEO_REQUEST_CODE)
+    }
+
 
     private fun save(){
         if (binding.editText.text.isEmpty() && vm.images.value.isNullOrEmpty()){
-            Snackbar.make(binding.root,"You cant't save an empty post",Snackbar.LENGTH_SHORT).show()
+            vm.setError("You cant't save an empty post")
             return
         }else{
 
@@ -168,14 +202,18 @@ class WritePostFragment: Fragment(R.layout.fragment_write_post) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode==Activity.RESULT_OK){
-            if (data!=null){
+        if(resultCode==Activity.RESULT_OK){
+
+            if (requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
                 val uri=CropImage.getActivityResult(data).uri
                 vm.addImage(uri.toString())
             }else{
-                Toast.makeText(requireContext(),"Something went wrong",Toast.LENGTH_SHORT).show()
+                vm.setVideo(data?.data.toString())
+                Log.d("wtf",requestCode.toString())
             }
-        }
+
+        }else
+            vm.setError("Something went wrong")
 
     }
 

@@ -36,6 +36,12 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:orientation="horizontal"
         android:visibility="gone"

@@ -13,15 +13,13 @@ import com.karimsinouh.socialmedia.utils.removeAt
 import javax.inject.Named
 
 @HiltViewModel
-class WritePostViewModel @Inject constructor(
-    @Named(USER_ID) private val uid:String
-) :ViewModel() {
+class WritePostViewModel @Inject constructor() :ViewModel() {
 
     //mutable values
     private val _images=MutableLiveData(mutableListOf<String>())
     private val _hashTags=MutableLiveData<List<String>>()
     private var _error=MutableLiveData<String>()
-    private val _videoUri=MutableLiveData<String?>()
+    private val _videoUri=MutableLiveData<String>(null)
 
     //observable values
     val images:LiveData<MutableList<String>> =_images
@@ -29,6 +27,10 @@ class WritePostViewModel @Inject constructor(
     val error:LiveData<String> =_error
     val videoUri:LiveData<String?> =_videoUri
 
+    //video
+    fun setVideo(uri:String?){
+        _videoUri.value=uri
+    }
 
     //hashTags
     fun setHashTags(tags:String){
@@ -45,5 +47,10 @@ class WritePostViewModel @Inject constructor(
     //images
     fun addImage(uri:String){ _images.addItem(uri) }
     fun removeImage(index:Int){ _images.removeAt(index) }
+
+    //error
+    fun setError(value: String) {
+        _error.postValue(value)
+    }
 
 }

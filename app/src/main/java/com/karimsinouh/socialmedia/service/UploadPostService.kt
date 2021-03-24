@@ -42,9 +42,9 @@ class UploadPostService:Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val videoUri=intent?.getStringExtra(KEY_VIDEO)?:""
-        val imagesUris=intent?.getStringArrayListExtra(KEY_IMAGES)!!
+        val imagesUris=intent?.getStringArrayListExtra(KEY_IMAGES)?: emptyList<String>()
 
-        val post=intent.getSerializableExtra(KEY_POST) as Post
+        val post=intent?.getSerializableExtra(KEY_POST) as Post
 
         when(intent.action){
             ACTION_TEXT->
