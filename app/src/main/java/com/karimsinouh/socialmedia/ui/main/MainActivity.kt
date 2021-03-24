@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.karimsinouh.socialmedia.R
 import com.karimsinouh.socialmedia.databinding.ActivityMainBinding
 import com.karimsinouh.socialmedia.utils.USER_ID
@@ -19,11 +21,16 @@ import javax.inject.Named
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    companion object{
+        const val ACTION_VIEW_POST="viewPostAction"
+        const val KEY_POST="post"
+    }
+
     private lateinit var binding:ActivityMainBinding
     private lateinit var nav:NavController
     private lateinit var vm:MainViewModel
 
-    @Inject @Named(USER_ID) lateinit var currentUserId:String
+    @Inject lateinit var auth:FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +52,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        vm.loadCurrentUser(currentUserId)
 
-        vm.loadPosts()
+        auth.currentUser?.let {
+            vm.loadCurrentUser(it.uid)
+            vm.loadPosts()
+        }
 
     }
 }

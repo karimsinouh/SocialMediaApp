@@ -6,6 +6,7 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.karimsinouh.socialmedia.R
 import com.karimsinouh.socialmedia.data.Post
@@ -41,9 +42,9 @@ class UploadPostService:Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val videoUri=intent?.getStringExtra(KEY_VIDEO)?:""
-        val imagesUris=intent?.getStringArrayExtra(KEY_IMAGES)?: emptyList<String>()
+        val imagesUris=intent?.getStringArrayListExtra(KEY_IMAGES)!!
 
-        val post=intent?.getSerializableExtra(KEY_POST) as Post
+        val post=intent.getSerializableExtra(KEY_POST) as Post
 
         when(intent.action){
             ACTION_TEXT->
@@ -56,7 +57,7 @@ class UploadPostService:Service() {
 
 
             ACTION_IMAGE->
-                repo.uploadPostWithImages(post, imagesUris as List<String>){
+                repo.uploadPostWithImages(post, imagesUris){
                     if (!it.isSuccessful)
                         handleFailure(it.message!!)
                     else
@@ -67,6 +68,7 @@ class UploadPostService:Service() {
 
             }
         }
+
 
         startForeground(1,notification.build())
 

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Social Media</string>
+    <string name="uploading_post">Uploading your post...</string>
 </resources>

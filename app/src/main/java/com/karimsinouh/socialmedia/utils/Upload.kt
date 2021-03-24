@@ -13,13 +13,36 @@ object Upload {
         Firebase.storage.reference
     }
 
-    fun image(path:String,uri:Uri,listener:(Result<String>)->Unit){
-        val fileName=System.currentTimeMillis().toString()+ Random.nextInt(1,999999)+".png"
+
+    fun images(path:String,uriList:List<String>,listener:(Result<List<String>>)->Unit){
+
+        val urls= mutableListOf<String>()
+
+        for(uri in uriList){
+            image(path,Uri.parse(uri)){
+                if (it.isSuccessful) {
+                    urls.add(it.data!!)
+
+                    if (uri==uriList.last())
+                        listener(Result(true,urls))
+                }
+                else {
+                    listener(Result(false, null, "Something went wrong while uploading"))
+                    return@image
+                }
+
+            }
+        }
+    }
+
+    fun image(path:String,uri:Uri,name:String?=null,listener:(Result<String>)->Unit){
+        val fileName=name ?: System.currentTimeMillis().toString()+ Random.nextInt(1,999999)+".png"
         val ref=storage.child("$path/$fileName")
         val uploadTask=ref.putFile(uri)
 
         val urlTask=uploadTask.continueWithTask {
             if (!it.isSuccessful){
+                listener(Result(false,null,it.exception?.message))
                 throw it.exception!!
             }
             ref.downloadUrl

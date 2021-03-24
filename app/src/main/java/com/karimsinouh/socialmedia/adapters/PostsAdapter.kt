@@ -30,7 +30,7 @@ class PostsAdapter @Inject constructor(
             if (post.pictures!!.isNotEmpty())
                 binding.picture.also {
                     it.show()
-                    glide.load(post.pictures[0]).into(it)
+                    glide.load(post.pictures!![0]).into(it)
                 }
 
             userRepo.getUser(post.userId!!){

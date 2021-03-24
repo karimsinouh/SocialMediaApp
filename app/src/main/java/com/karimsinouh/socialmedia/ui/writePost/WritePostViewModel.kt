@@ -18,14 +18,16 @@ class WritePostViewModel @Inject constructor(
 ) :ViewModel() {
 
     //mutable values
-    private val _images=MutableLiveData(mutableListOf<Uri>())
+    private val _images=MutableLiveData(mutableListOf<String>())
     private val _hashTags=MutableLiveData<List<String>>()
     private var _error=MutableLiveData<String>()
+    private val _videoUri=MutableLiveData<String?>()
 
     //observable values
-    val images:LiveData<MutableList<Uri>> =_images
+    val images:LiveData<MutableList<String>> =_images
     val hashTags:LiveData<List<String>> =_hashTags
     val error:LiveData<String> =_error
+    val videoUri:LiveData<String?> =_videoUri
 
 
     //hashTags
@@ -41,22 +43,7 @@ class WritePostViewModel @Inject constructor(
     }
 
     //images
-    fun addImage(uri:Uri){ _images.addItem(uri) }
+    fun addImage(uri:String){ _images.addItem(uri) }
     fun removeImage(index:Int){ _images.removeAt(index) }
-
-    fun save(text:String){
-
-        val post=Post(uid,text)
-
-        if (text.isEmpty() && _images.value.isNullOrEmpty()){
-            _error.value="You can't save en empty post"
-            return
-        }
-
-        if(!_images.value.isNullOrEmpty()){
-            //upload images first
-        }
-
-    }
 
 }
